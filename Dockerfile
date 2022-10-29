@@ -4,6 +4,7 @@ WORKDIR $GOPATH/src
 EXPOSE 8080
 
 ADD . .
+COPY ./dockerize/src ./src
 RUN go env -w GO111MODULE=off
 RUN go get -d github.com/go-sql-driver/mysql
 RUN go build -o webserver ./dockerize/webserver.go

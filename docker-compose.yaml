@@ -24,7 +24,7 @@ services:
       MYSQL_USER: stack_user
       MYSQL_PASSWORD: stack_password
       MYSQL_ROOT_PASSWORD: stack_root_password
-      MYSQL_DATABASE: stack_golang
+      MYSQL_DATABASE: blog
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
