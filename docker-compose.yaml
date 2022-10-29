@@ -29,6 +29,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
 networks:
   stack_net:
     ipam:
