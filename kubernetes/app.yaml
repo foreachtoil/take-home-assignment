@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: myapp
+  name: myapp
+  namespace: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: myapp
+    spec:
+      initContainers:
+      - image: busybox:latest
+        name: sleep
+        command: ["sh", "-c", "sleep 30"]
+      containers:
+      - image: foreachtoil/sample-go-app:1.0.0
+        name: sample-go-app
+        lifecycle:
+          # postStart:
+          preStop: 
+            exec:
+              command: ["sh", "-c", "echo I'm being deleted & sleep 5"]
+        resources: {}
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20 
+          periodSeconds: 20
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: myapp
+  name: myapp
+spec:
+  ports:
+  - name: 80-8080
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: myapp
+  type: ClusterIP
+status:
+  loadBalancer: {}
